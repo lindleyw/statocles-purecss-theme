@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+         <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
+         <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/theme/css/statocles-default.css" />
+    <title><%== $self->title ? $self->title . ' - ' : '' %><%== $site->title %></title>
+    <meta name="generator" content="Statocles <%= $Statocles::VERSION %>" />
+    % for my $link ( $self->links( 'feed' ) ) {
+      <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
+    % }
+    % if ( my $img = $site->images->{ 'icon' } ) {
+      <link rel="shortcut icon" href="<%= $img->src %>" />
+    % }
+    %= include 'site/head_after.html.ep'
+    % for my $link ( $site->links( 'stylesheet' ) ) {
+      <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+    % }
+    % for my $link ( $self->links( 'stylesheet' ) ) {
+      <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+    % }
+    % for my $link ( $site->links( 'script' ) ) {
+      <script src="<%= $link->href %>"></script>
+    % }
+    % for my $link ( $self->links( 'script' ) ) {
+      <script src="<%= $link->href %>"></script>
+    % }
+  </head>
+  <body>
+    <div class="pure-g">
+      <header class="pure-u-1">
+        <div class="logo-box" style="margin: 1em;">
+	  <!-- from site.yml: site/args/images/logo ? -->
+          % if ( my $img = $site->images->{ 'logo' } ) {
+            <img class="logo pure-img" src="<%= $img->src %>" alt="<%= $img->alt // 'Logo' %>" />
+          % }
+        </div>
+      </header>
+    </div>
+    <div class="pure-g">
+      <div class="pure-u-1 pure-u-md-1-5 sidebar">
+        <div style="min-height: 100px;">
+	  <!-- from site.yml: site/args/data/sidebar.heading -->
+          % if ( my $heading = $site->data->{'sidebar.heading'} ) {
+            <h1 class="sidebar-heading"><%= $heading %></h1>
+          % }
+          <nav class="nav">
+            <a class="brand" href="/"><%= $site->title %></a>
+            % if ( my @nav_links = $site->nav( 'main' ) ) {
+              <ul>
+                % for my $nav ( @nav_links ) {
+                  <li>
+                    <a href="<%= $nav->href %>"><%= $nav->text %></a>
+                  </li>
+                % }
+              </ul>
+            % }
+            %= include 'site/navbar_extra.html.ep'
+          </nav>
+        </div>
+      </div>
+      %= include 'site/header_after.html.ep'
+      <div class="pure-u-1 pure-u-md-4-5 content">
+        <%= $content %>
+      </div>
+    </div>
+    <footer class="pure-u-1">
+      %= include 'site/footer.html.ep'
+      <div class="container tagline">
+        <a href="http://preaction.me/statocles">Made with Statocles</a><br/>
+        <a href="http://www.perl.org">Powered by Perl</a>
+      </div>
+    </footer>
+  </body>
+</html>
